@@ -6,7 +6,7 @@ async function sendMessage() {
     // Get bot response asynchronously
     getBotResponse(userInput).then(botResponse => {
         // Display bot response in the chat
-        document.getElementById('chat-messages').innerHTML += '<div class="bot-message">Doctor Hoo: ' + botResponse + '</div>';
+        document.getElementById('chat-messages').innerHTML += '<div class="bot-message">Dr. Hoo: ' + botResponse + '</div>';
         // Scroll to the bottom of the chat container
         var chatContainer = document.querySelector('.chat-body');
         chatContainer.scrollTop = chatContainer.scrollHeight;
