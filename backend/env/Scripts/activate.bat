@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\josha\OneDrive\Documents\5. HooHacks 2024\UVA-HooHacks-2024-Project\backend\env
+set VIRTUAL_ENV=C:\Users\karee\Downloads\Hoohacks24\doctor-hoo\backend\env
 
 if not defined PROMPT set PROMPT=$P$G
 
