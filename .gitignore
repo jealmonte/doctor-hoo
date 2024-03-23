@@ -1,6 +1,8 @@
 # Virtual environment
 env/
 venv/
+frank_env/
+josh_env/
 
 # Python bytecode
 __pycache__/
