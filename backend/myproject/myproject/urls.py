@@ -18,7 +18,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from myproject.chatbot.views import chatbot_response
+from chatbot.views import chatbot_response
 
 urlpatterns = [
     path('admin/', admin.site.urls),
