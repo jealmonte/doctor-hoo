@@ -10,15 +10,51 @@ YOUR_API_KEY = "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"
 
 @csrf_exempt
 def chatbot_response(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        user_message = data['message']
-
-        response = process_user_message(user_message)
-
-        return JsonResponse({'message': response})
-    else:
+    if request.method != "POST":
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+    # Attempt to parse the JSON data from the request
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    
+    # Check if it's an appointment form submission
+    if data.get('appointment'):
+        # Extract appointment data with safer get method
+        full_name = data.get('full_name')
+        dob = data.get('dob')
+        phone = data.get('phone')
+        preferred_datetime = data.get('preferred_datetime')
+        reason = data.get('reason')
+
+        # Validate the required fields
+        if not all([full_name, dob, phone, preferred_datetime, reason]):
+            return JsonResponse({'error': 'Missing required appointment fields'}, status=400)
+        
+        # Create and save the appointment
+        try:
+            appointment = Appointment(
+                full_name=full_name,
+                dob=dob,
+                phone=phone,
+                preferred_datetime=preferred_datetime,
+                reason=reason
+            )
+            appointment.save()
+        except Exception as e:
+            # Log the error here
+            return JsonResponse({'error': 'Failed to save appointment', 'details': str(e)}, status=500)
+        
+        return JsonResponse({'message': 'Appointment scheduled successfully!'})
+    else:
+        # Handle other POST requests here as needed
+        user_message = data.get('message')
+        if user_message:
+            response = process_user_message(user_message)
+            return JsonResponse({'message': response})
+        else:
+            return JsonResponse({'error': 'No actionable data found'}, status=400)
 
 
 def process_user_message(user_message):
@@ -53,61 +89,123 @@ def process_user_message(user_message):
     if "appointment" in user_message.lower():
         # Return an HTML form for appointment scheduling
         form_html = '''
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Appointment Form</title>
+                <style>
+                    #appointment-form-container {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        /* Additional container styles if needed */
+                    }
+
+                    #appointment-form {
+                        background: #ffffff;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        width: 100%;
+                        max-width: 500px;
+                    }
+
+                    #appointment-form h2 {
+                        text-align: center;
+                        margin-bottom: 20px;
+                    }
+
+                    #appointment-form label {
+                        font-weight: bold;
+                        display: block;
+                        margin-bottom: 5px;
+                    }
+
+                    #appointment-form input[type="text"],
+                    #appointment-form input[type="date"],
+                    #appointment-form input[type="tel"],
+                    #appointment-form input[type="datetime-local"],
+                    #appointment-form textarea {
+                        width: 100%;
+                        padding: 10px;
+                        margin-bottom: 20px;
+                        border-radius: 4px;
+                        border: 1px solid #ddd;
+                    }
+
+                    #appointment-form button {
+                        background-color: #0056b3;
+                        color: white;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 16px;
+                        width: 100%;
+                    }
+
+                    #appointment-form button:hover {
+                        background-color: #004494;
+                    }
+                </style>
+            </head>
+            <body>
+
             <form id="appointment-form">
+                <h2>Schedule Appointment</h2>
+                
                 <label for="full-name">Full Name:</label>
-                <input type="text" id="full-name" name="full-name" required><br>
-
+                <input type="text" id="full-name" name="full-name" required>
+                
                 <label for="dob">Date of Birth:</label>
-                <input type="date" id="dob" name="dob" required><br>
-
+                <input type="date" id="dob" name="dob" required>
+                
                 <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" required><br>
-
+                <input type="tel" id="phone" name="phone" required>
+                
                 <label for="date-time">Preferred Date and Time:</label>
-                <input type="datetime-local" id="date-time" name="date-time" required><br>
-
+                <input type="datetime-local" id="date-time" name="date-time" required>
+                
                 <label for="reason">Reason for Visit:</label>
-                <textarea id="reason" name="reason" required></textarea><br>
-
+                <textarea id="reason" name="reason" required></textarea>
+                
                 <button type="submit">Submit</button>
             </form>
 
             <script>
                 document.getElementById("appointment-form").addEventListener("submit", function(event) {
                     event.preventDefault();
+                    var formData = new FormData(this);
+                    var appointmentData = {
+                        appointment: true,
+                        full_name: formData.get('full-name'),
+                        dob: formData.get('dob'),
+                        phone: formData.get('phone'),
+                        preferred_datetime: formData.get('date-time'),
+                        reason: formData.get('reason')
+                    };
 
-                    var selectedDateTime = new Date(document.getElementById("date-time").value);
-                    var selectedDay = selectedDateTime.getDay();
-                    var selectedHour = selectedDateTime.getHours();
-                    var selectedMinute = selectedDateTime.getMinutes();
-
-                    var isValidDateTime = false;
-
-                    if (selectedDay >= 1 && selectedDay <= 5) {
-                        // Monday to Friday
-                        if (selectedHour >= 6 && selectedHour < 19) {
-                            // 6:00 AM to 7:30 PM
-                            isValidDateTime = true;
-                        } else if (selectedHour === 19 && selectedMinute <= 30) {
-                            // Up to 7:30 PM
-                            isValidDateTime = true;
-                        }
-                    } else if (selectedDay === 6 || selectedDay === 0) {
-                        // Saturday or Sunday
-                        if (selectedHour >= 7 && selectedHour < 16) {
-                            // 7:00 AM to 4:00 PM
-                            isValidDateTime = true;
-                        }
-                    }
-
-                    if (isValidDateTime) {
-                        // Submit the form if the selected date and time are within operating hours
-                        this.submit();
-                    } else {
-                        alert("Please select a date and time within the operating hours.");
-                    }
+                    fetch('/chatbot_response', { // Ensure the URL matches your setup
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(appointmentData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message); // Notify the user with the server response
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("There was a problem with your submission: " + error.message);
+                    });
                 });
             </script>
+
+            </body>
+            </html>
+
         '''
         return form_html
 
