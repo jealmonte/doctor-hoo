@@ -217,10 +217,53 @@ def process_user_message(user_message):
     # Check if the user's message matches any specific patterns
     elif "bill" in user_message.lower():
         return "For billing inquiries, you can contact our billing department by phone at (844) 377-0846 or use MyChart to pay online"
+    
     elif "find" in user_message.lower() and "doctor" in user_message.lower():
         return "To find a doctor, please visit our website and use the 'Find a Doctor' tool or contact our customer support for assistance."
-    elif "services" in user_message.lower():
-        return "We offer a wide range of healthcare services, including primary care, specialty care, diagnostic services, and more. Visit our website for detailed information."
+    
+    elif any(service_keyword in user_message.lower() for service_keyword in ["service", "services"]):
+        services_with_links = {
+            "Allergy": "https://uvahealth.com/services/allergy",
+            "Autoimmune Disease Treatment": "https://uvahealth.com/services/autoimmune-rheumatology",
+            "Cancer Center": "https://uvahealth.com/services/cancer",
+            "Dentistry": "https://uvahealth.com/services/dentistry",
+            "Dermatology": "https://uvahealth.com/services/dermatology",
+            "Diabetes Care": "https://uvahealth.com/services/diabetes-care",
+            "Digestive Health": "https://uvahealth.com/services/gastro",
+            "Ear Nose & Throat": "https://uvahealth.com/services/ear-nose-throat",
+            "Endocrine Thyroid & Hormone Services": "https://uvahealth.com/services/endocrine",
+            "Eye Care": "https://uvahealth.com/services/eye-care",
+            "Heart & Vascular Center": "https://uvahealth.com/services/heart",
+            "Hyperbaric Oxygen Therapy": "https://uvahealth.com/services/hyperbaric-oxygen-therapy",
+            "Imaging & Radiology": "https://uvahealth.com/services/imaging",
+            "Infectious Disease": "https://uvahealth.com/services/infectious-disease",
+            "Kidney Care": "https://uvahealth.com/services/kidney-care",
+            "Liver Disease Treatment": "https://uvahealth.com/services/liver-disease-treatment",
+            "Lung Disease & Sleep Disorders": "https://uvahealth.com/services/pulmonary",
+            "Men's Health": "https://uvahealth.com/services/mens-health",
+            "Neurosciences & Mental Health": "https://uvahealth.com/services/neuro",
+            "Orthopedics & Sports Medicine": "https://uvahealth.com/services/orthopedics",
+            "Pediatric Care": "https://uvahealth.com/services/pediatric-care",
+            "Pregnancy & Birth": "https://uvahealth.com/services/pregnancy-birth",
+            "Primary Care": "https://uvahealth.com/services/primary-care",
+            "Spine Services": "https://uvahealth.com/services/spine",
+            "Surgery & Procedures": "https://uvahealth.com/services/surgery",
+            "Transplant": "https://uvahealth.com/services/transplant",
+            "Urology": "https://uvahealth.com/services/urology",
+            "Weight-Loss Surgery": "https://uvahealth.com/services/weight-loss-surgery",
+            "Women's Health & Gynecology": "https://uvahealth.com/services/womens-health",
+        }
+
+        # Generating an unordered list in HTML format with links
+        services_list_html = "<ul>" + "".join(
+            f"<li><a href='{url}' target='_blank' style='color: #ADD8E6;'>{service}</a></li>" 
+            for service, url in services_with_links.items()
+        ) + "</ul>"
+
+
+        response = f"UVA Health provides a variety of medical services. Here is the list: {services_list_html} More info can be found by selecting a service!"
+        return response
+    
     elif "locations" in user_message.lower():
         return "We have multiple locations across the city. Please visit our website or contact customer support for the nearest location."
     elif "patient" in user_message.lower() or "visitor" in user_message.lower():
