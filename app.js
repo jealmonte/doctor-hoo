@@ -49,3 +49,22 @@ function startConversation() {
 window.onload = startConversation;
 // Attach event listener to send button
 document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+// Function to handle the enter key press event
+function handleEnterKey(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        sendMessage();
+    }
+}
+
+// Start the conversation when the page loads
+window.onload = function() {
+    startConversation();
+
+    // Attach event listener to send button
+    document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+    // Attach event listener for enter key press on the user input field
+    document.getElementById('user-input').addEventListener('keypress', handleEnterKey);
+};
