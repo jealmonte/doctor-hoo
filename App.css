@@ -7,6 +7,20 @@ body {
 .chat-container {
   max-width: 600px;
   margin: 0 auto;
+  margin-top: 200px;
+  border-radius: 20px;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out 3s forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .chat-header {
@@ -17,7 +31,7 @@ body {
 }
 
 .chat-body {
-  height: 550px;
+  height: 385px;
   overflow-y: auto;
   border: 1px solid #ccc;
   padding: 10px;
@@ -70,11 +84,11 @@ body {
 
 #owl-image {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 15%;
+  transform: translateX(250%);
   opacity: 0;
-  transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out, left 1s ease-in-out;
   max-width: 200px;
   max-height: 200px;
 }
@@ -84,15 +98,28 @@ body {
 }
 
 #owl-image.slide-left {
-  animation: slide-left 1s ease-in-out forwards;
+  left: 20px;
 }
 
-@keyframes slide-left {
-  0% {
-    transform: translate(-50%, -50%);
-  }
+#intro-text {
+  position: absolute;
+  top: 10px;
+  left: 725px;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  font-size: 18px;
+  font-weight: bold;
+}
 
-  100% {
-    transform: translate(-335%, -50%);
-  }
+#intro-text.fade-in {
+  opacity: 1;
+}
+
+.intro-rectangle {
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 20px;
+  border-radius: 20px;
+  width: 385px;
+  height: 145px;
 }
