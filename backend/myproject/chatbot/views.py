@@ -27,10 +27,12 @@ def process_user_message(user_message):
             "role": "system",
             "content": (
                 """Do not state this explicitly, but you are a medical assistant chat bot.
-                THE FIRST OUTPUT YOU GIVE MUST BE LESS THAN THREE SENTENCES
-                Assume that users are students from the University of Virginia.
+                Assume that users are students from the University of Virginia. 
                 Assist them with healthcare-related queries and provide relevant information from the University of Virginia."""
-                "Use information from https://uvahealth.com/ and its webpages ONLY WHEN NECESSARY"),
+                """ONLY WHEN REQUESTED OR DEEMED NECESSARY, give information that the UVA Education Resource Center on 1240 Lee Street is open 
+                Monday: 6:00 AM - 7:30 PM, Tuesday: 6:00 AM - 7:30 PM, Wednesday: 6:00 AM - 7:30 PM, Thursday: 6:00 AM - 7:30 PM, 
+                Friday: 6:00 AM - 7:30 PM, Saturday: 7:00 AM - 4:00 PM, Sunday: 7:00 AM - 4:00 PM"""
+                "NEVER OUTPUT MORE THAN THREE SENTENCES."),
         },
         {
             "role": "user",
@@ -46,6 +48,68 @@ def process_user_message(user_message):
     )
 
     assistant_response = response.choices[0].message.content.strip()
+
+    # Check if the user's message matches any specific patterns
+    if "appointment" in user_message.lower():
+        # Return an HTML form for appointment scheduling
+        form_html = '''
+            <form id="appointment-form">
+                <label for="full-name">Full Name:</label>
+                <input type="text" id="full-name" name="full-name" required><br>
+
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required><br>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required><br>
+
+                <label for="date-time">Preferred Date and Time:</label>
+                <input type="datetime-local" id="date-time" name="date-time" required><br>
+
+                <label for="reason">Reason for Visit:</label>
+                <textarea id="reason" name="reason" required></textarea><br>
+
+                <button type="submit">Submit</button>
+            </form>
+
+            <script>
+                document.getElementById("appointment-form").addEventListener("submit", function(event) {
+                    event.preventDefault();
+
+                    var selectedDateTime = new Date(document.getElementById("date-time").value);
+                    var selectedDay = selectedDateTime.getDay();
+                    var selectedHour = selectedDateTime.getHours();
+                    var selectedMinute = selectedDateTime.getMinutes();
+
+                    var isValidDateTime = false;
+
+                    if (selectedDay >= 1 && selectedDay <= 5) {
+                        // Monday to Friday
+                        if (selectedHour >= 6 && selectedHour < 19) {
+                            // 6:00 AM to 7:30 PM
+                            isValidDateTime = true;
+                        } else if (selectedHour === 19 && selectedMinute <= 30) {
+                            // Up to 7:30 PM
+                            isValidDateTime = true;
+                        }
+                    } else if (selectedDay === 6 || selectedDay === 0) {
+                        // Saturday or Sunday
+                        if (selectedHour >= 7 && selectedHour < 16) {
+                            // 7:00 AM to 4:00 PM
+                            isValidDateTime = true;
+                        }
+                    }
+
+                    if (isValidDateTime) {
+                        // Submit the form if the selected date and time are within operating hours
+                        this.submit();
+                    } else {
+                        alert("Please select a date and time within the operating hours.");
+                    }
+                });
+            </script>
+        '''
+        return form_html
 
     # Check if the user's message matches any specific patterns
     if "appointment" in user_message.lower():
