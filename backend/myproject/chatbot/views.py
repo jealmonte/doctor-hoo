@@ -217,8 +217,14 @@ def process_user_message(user_message):
 
     # Check if the user's message matches any specific patterns
     elif "estimate" in user_message.lower():
-        # Prompt the user to select a healthcare location
-        return "Please select a healthcare location:\n1. UVA Health Culpeper Medical Center\n2. UVA Health Haymarket Medical Center\n3. UVA Health Prince William Medical Center\n4. UVA University Hospital\n"
+        # Prompt the user to select a healthcare location in HTML format
+        return '''Please select a healthcare location:
+                <ol>
+                    <li>UVA Health Culpeper Medical Center</li>
+                    <li>UVA Health Haymarket Medical Center</li>
+                    <li>UVA Health Prince William Medical Center</li>
+                    <li>UVA University Hospital</li>
+                </ol>'''
     if any(location in user_message.lower() for location in ["uva health culpeper medical center", "uva health haymarket medical center", "uva health prince william medical center", "uva university hospital"]):
         # Prompt the user to enter their insurance company
         return "Please enter the name of your insurance company:"
