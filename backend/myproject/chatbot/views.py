@@ -242,7 +242,7 @@ def process_user_message(user_message):
                 return f"Based on your selected location, insurance company, and service '{service}', the estimated cost is ${estimate}."
     
     elif "find" in user_message.lower() and "doctor" in user_message.lower():
-        return "To find a doctor, please visit our website and use the 'Find a Doctor' tool or contact our customer support for assistance."
+        return '''To search for a doctor by name, condition, or treatment, please visit the UVA website and use the <a href="https://uvahealth.com/findadoctor" target="_blank" style="color: #add8e6; text-decoration: underline;">'Find a Doctor'</a> tool!'''
     
     elif any(service_keyword in user_message.lower() for service_keyword in ["service", "services"]):
         services_with_links = {
@@ -298,10 +298,24 @@ def process_user_message(user_message):
     }
     </style><p>To pay a medical bill, use UVA's <a href="https://mychart.healthsystem.virginia.edu/mychart/">MyChart</a> to pay online, or call to pay by phone: <a href="tel:844-377-0846">844.377.0846</a>!</p>'''    
 
-    elif "locations" in user_message.lower():
-        return "We have multiple locations across the city. Please visit our website or contact customer support for the nearest location."
+    if "locations" in user_message.lower():
+        return '''<style>
+                a {
+                    color: #add8e6; /* Light blue for a softer appearance */
+                    text-decoration: underline; /* Keeps links underlined for clarity */
+                }
+                </style>
+                <p>We have multiple locations across the state:</p>
+                <ol>
+                    <li><a href="https://example.com/education-resource-center" target="_blank">Education Resource Center</a></li>
+                    <li><a href="https://example.com/emily-couric-clinical-cancer-center" target="_blank">Emily Couric Clinical Cancer Center</a></li>
+                    <li><a href="https://example.com/orthopedic-center" target="_blank">Orthopedic Center</a></li>
+                    <li><a href="https://example.com/primary-care-center" target="_blank">Primary Care Center</a></li>
+                    <li><a href="https://example.com/university-hospital" target="_blank">University Hospital</a></li>
+                </ol>
+                <p>Try asking about where they're located, operating hours, or more specifics.</p>'''
     elif "patient" in user_message.lower() or "visitor" in user_message.lower():
-        return "For patient and visitor information, please refer to the guidelines provided on our website or contact our customer support."
+        return "For general information regarding patient and visitors, " + '<a href="https://uvahealth.com/patients-visitors" target="_blank">click here!</a>'
     elif "other" in user_message.lower():
         return "What can I help you with? I can help you with hours, locations, doctors, and more!"
     elif "education resource center" in user_message.lower() and ("hours" in user_message.lower() or "open" in user_message.lower() or "where" in user_message.lower() or "address" in user_message.lower() or "located" in user_message.lower()):
