@@ -42,8 +42,6 @@ async function getBotResponse(userInput) {
 function startConversation() {
     const chatBody = document.getElementById('chat-messages');
     const initialMessage = document.createElement('div');
-    initialMessage.classList.add('bot-message');
-    initialMessage.innerHTML = 'Hello! I am Doctor Hoo, your virtual medical assistant. How can I help you ? <br> 1) Request an appointment<br> 2) See a price estimate<br> 3) Pay a medical bill<br> 4) Other';
     chatBody.appendChild(initialMessage);
     chatBody.scrollTop = chatBody.scrollHeight;
 }
@@ -59,6 +57,7 @@ function handleEnterKey(event) {
 // Function to animate the owl image
 function animateOwlImage() {
     const owlImage = document.getElementById('owl-image');
+    const introText = document.getElementById('intro-text');
 
     // Show the image and fade it in
     owlImage.style.display = 'block';
@@ -69,6 +68,10 @@ function animateOwlImage() {
     // Slide the image to the left after it fades in
     setTimeout(() => {
         owlImage.classList.add('slide-left');
+        introText.style.display = 'block';
+        setTimeout(() => {
+            introText.classList.add('fade-in');
+        }, 500);
     }, 1100); // Adjust the delay based on the fade-in duration
 }
 
