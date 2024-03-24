@@ -86,7 +86,7 @@ def process_user_message(user_message):
     assistant_response = response.choices[0].message.content.strip()
 
     # Check if the user's message matches any specific patterns
-    if "appointment" in user_message.lower():
+    if any(apt_keyword in user_message.lower() for apt_keyword in ["appointment", "appointments", "request an appointment"]):
         # Return an HTML form for appointment scheduling
         form_html = '''
             <!DOCTYPE html>
@@ -102,10 +102,11 @@ def process_user_message(user_message):
                     }
 
                     #appointment-form {
-                        background: #ffffff;
+                        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                        background: #2c2c2e;
                         padding: 20px;
                         border-radius: 8px;
-                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
                         width: 100%;
                         max-width: 500px;
                     }
@@ -113,12 +114,14 @@ def process_user_message(user_message):
                     #appointment-form h2 {
                         text-align: center;
                         margin-bottom: 20px;
+                        color: #ffffff;
                     }
 
                     #appointment-form label {
                         font-weight: bold;
                         display: block;
                         margin-bottom: 5px;
+                        color: #ffffff;
                     }
 
                     #appointment-form input[type="text"],
@@ -130,11 +133,13 @@ def process_user_message(user_message):
                         padding: 10px;
                         margin-bottom: 20px;
                         border-radius: 4px;
-                        border: 1px solid #ddd;
+                        border: 1px solid #555555;
+                        background-color: #3c3c3e
+                        color: #ffffff;
                     }
 
                     #appointment-form button {
-                        background-color: #0056b3;
+                        background-color: #0077cc;
                         color: white;
                         padding: 10px 20px;
                         border: none;
@@ -145,14 +150,14 @@ def process_user_message(user_message):
                     }
 
                     #appointment-form button:hover {
-                        background-color: #004494;
+                        background-color: #005fa3;
                     }
                 </style>
             </head>
             <body>
 
             <form id="appointment-form">
-                <h2>Schedule Appointment</h2>
+                <h2>Request an Appointment</h2>
                 
                 <label for="full-name">Full Name:</label>
                 <input type="text" id="full-name" name="full-name" required>
@@ -210,8 +215,6 @@ def process_user_message(user_message):
         return form_html
 
     # Check if the user's message matches any specific patterns
-    if "appointment" in user_message.lower():
-        return "Sure, I can help you make an appointment. Please provide the necessary details."
     elif "bill" in user_message.lower():
         return "For billing inquiries, you can contact our billing department by phone at (844) 377-0846 or use MyChart to pay online"
     elif "find" in user_message.lower() and "doctor" in user_message.lower():
