@@ -10,10 +10,12 @@ async function sendMessage() {
         // Scroll to the bottom of the chat container
         var chatContainer = document.querySelector('.chat-body');
         chatContainer.scrollTop = chatContainer.scrollHeight;
+
     });
     // Clear the user input field
     document.getElementById('user-input').value = '';
 }
+
 async function getBotResponse(userInput) {
     try {
         let response = await fetch('http://localhost:8000/api/chatbot/', {
@@ -35,13 +37,17 @@ async function getBotResponse(userInput) {
         return 'Sorry, there was an error connecting to the chatbot.';
     }
 }
+
 // Function to start the conversation
 function startConversation() {
     const chatBody = document.getElementById('chat-messages');
     const initialMessage = document.createElement('div');
+    initialMessage.classList.add('bot-message');
+    initialMessage.innerHTML = 'Hello! I am Doctor Hoo, your virtual medical assistant. How can I help you ? <br> 1) Request an appointment<br> 2) See a price estimate<br> 3) Pay a medical bill<br> 4) Other';
     chatBody.appendChild(initialMessage);
     chatBody.scrollTop = chatBody.scrollHeight;
 }
+
 // Function to handle the enter key press event
 function handleEnterKey(event) {
     if (event.key === 'Enter') {
@@ -49,10 +55,11 @@ function handleEnterKey(event) {
         sendMessage();
     }
 }
-// Function to animate the owl image and intro text
+
+// Function to animate the owl image
 function animateOwlImage() {
     const owlImage = document.getElementById('owl-image');
-    const introText = document.getElementById('intro-text');
+
     // Show the image and fade it in
     owlImage.style.display = 'block';
     setTimeout(() => {
@@ -62,21 +69,17 @@ function animateOwlImage() {
     // Slide the image to the left after it fades in
     setTimeout(() => {
         owlImage.classList.add('slide-left');
-        // Fade in the intro text after the image slides to the left
-        introText.style.display = 'block';
-        setTimeout(() => {
-            introText.classList.add('fade-in');
-        }, 500);
     }, 1100); // Adjust the delay based on the fade-in duration
-
 }
+
 // Start the conversation and animate the owl image when the page loads
 window.onload = function () {
     startConversation();
     animateOwlImage();
+
     // Attach event listener to send button
     document.getElementById('send-btn').addEventListener('click', sendMessage);
 
     // Attach event listener for enter key press on the user input field
     document.getElementById('user-input').addEventListener('keypress', handleEnterKey);
-}
+};
