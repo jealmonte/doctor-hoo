@@ -15,6 +15,7 @@ async function sendMessage() {
     // Clear the user input field
     document.getElementById('user-input').value = '';
 }
+
 async function getBotResponse(userInput) {
     try {
         let response = await fetch('http://localhost:8000/api/chatbot/', {
@@ -36,6 +37,7 @@ async function getBotResponse(userInput) {
         return 'Sorry, there was an error connecting to the chatbot.';
     }
 }
+
 // Function to start the conversation
 function startConversation() {
     const chatBody = document.getElementById('chat-messages');
@@ -45,10 +47,6 @@ function startConversation() {
     chatBody.appendChild(initialMessage);
     chatBody.scrollTop = chatBody.scrollHeight;
 }
-// Start the conversation when the page loads
-window.onload = startConversation;
-// Attach event listener to send button
-document.getElementById('send-btn').addEventListener('click', sendMessage);
 
 // Function to handle the enter key press event
 function handleEnterKey(event) {
@@ -58,9 +56,26 @@ function handleEnterKey(event) {
     }
 }
 
-// Start the conversation when the page loads
-window.onload = function() {
+// Function to animate the owl image
+function animateOwlImage() {
+    const owlImage = document.getElementById('owl-image');
+
+    // Show the image and fade it in
+    owlImage.style.display = 'block';
+    setTimeout(() => {
+        owlImage.classList.add('fade-in');
+    }, 100); // Add a slight delay for the fade-in effect
+
+    // Slide the image to the left after it fades in
+    setTimeout(() => {
+        owlImage.classList.add('slide-left');
+    }, 1100); // Adjust the delay based on the fade-in duration
+}
+
+// Start the conversation and animate the owl image when the page loads
+window.onload = function () {
     startConversation();
+    animateOwlImage();
 
     // Attach event listener to send button
     document.getElementById('send-btn').addEventListener('click', sendMessage);
