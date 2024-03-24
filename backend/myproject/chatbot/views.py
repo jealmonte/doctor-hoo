@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import random
 
 # Josh's API key
 YOUR_API_KEY = "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"
@@ -215,8 +216,30 @@ def process_user_message(user_message):
         return form_html
 
     # Check if the user's message matches any specific patterns
-    elif "bill" in user_message.lower():
-        return "For billing inquiries, you can contact our billing department by phone at (844) 377-0846 or use MyChart to pay online"
+    elif "estimate" in user_message.lower():
+        # Prompt the user to select a healthcare location
+        return "Please select a healthcare location:\n1. UVA Health Culpeper Medical Center\n2. UVA Health Haymarket Medical Center\n3. UVA Health Prince William Medical Center\n4. UVA University Hospital\n"
+    if any(location in user_message.lower() for location in ["uva health culpeper medical center", "uva health haymarket medical center", "uva health prince william medical center", "uva university hospital"]):
+        # Prompt the user to enter their insurance company
+        return "Please enter the name of your insurance company:"
+    if any(insurance_company in user_message.lower() for insurance_company in ["aetna", "anthem", "cigna", "medicare", "united healthcare"]):
+            return "What service are you looking for?"
+    service_cost_ranges = {
+        "allergy": (25, 40),
+        "cancer": (200, 500),
+        "dentistry": (100, 300),
+        "diabetes": (40, 80),
+        "digestive health": (300, 400),
+        "eye care": (90, 300),
+        "lung disease": (250, 400),
+    }
+    if any(service in user_message.lower() for service in ["allergy", "cancer", "dentistry", "diabetes", "digestive health", "eye care", "lung disease"]):
+        # Store the service and generate a random estimate
+        for service, cost_range in service_cost_ranges.items():
+            if service in user_message.lower():
+                min_cost, max_cost = cost_range
+                estimate = random.randint(min_cost, max_cost)
+                return f"Based on your selected location, insurance company, and service '{service}', the estimated cost is ${estimate}."
     
     elif "find" in user_message.lower() and "doctor" in user_message.lower():
         return "To find a doctor, please visit our website and use the 'Find a Doctor' tool or contact our customer support for assistance."
