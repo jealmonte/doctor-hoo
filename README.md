@@ -29,6 +29,9 @@ Our chatbot plans to remove all of these redundancies, and make the overall user
 Since we don't have access to the source code or databases of the UVA health website, we used placeholders as substitute. <br/> 
 The functionality is still there, but we don't have accurate information according to UVA webpages.
 
+
+-------------------------------------------------------------------------------------------
+
 Here is how to setup Doctor Hoo:
 
 Open the powershell terminal in vscode after cloning the repo, and type these to create the virtual environment for python and activate it:
