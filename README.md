@@ -28,3 +28,40 @@ Our chatbot plans to remove all of these redundancies, and make the overall user
 
 Since we don't have access to the source code or databases of the UVA health website, we used placeholders as substitute. <br/> 
 The functionality is still there, but we don't have accurate information according to UVA webpages.
+
+Here is how to setup Doctor Hoo:
+
+Open the powershell terminal in vscode after cloning the repo, and type these to create the virtual environment for python and activate it:
+
+cd backend
+python -m venv venv
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+venv\Scripts\Activate.ps1
+pip install openai
+pip install django
+pip install django-cors-headers
+
+Then, make sure you have node.js installed: https://nodejs.org/
+
+In a new terminal with the normal directory,
+node -v (make sure node is installed)
+npm install vite
+
+To run frontend server, in the normal directory type:
+npm run frontend
+
+To run backend server, go to the views.py 
+It is under: backend>myproject>chatbot>views.py, 
+and then type in the quotation marks for YOUR_API_KEY the given API key
+
+Then, activate the virtual environment in the terminal:
+cd backend
+venv\Scripts\Activate.ps1
+
+And then direct to myproject:
+cd myproject
+
+And then run the server:
+python manage.py runserver
+
+Now, when you click on the localhost server given by the frontend command and talk to Doctor Hoo, it should respond. If it is not responding, and says there was an issue with your request, your backend server is not working due to an error in setting up the necessary packages. Send over the error to almontejoshua2@gmail.com, or try to run through the setup and make sure you've done everything correct.
