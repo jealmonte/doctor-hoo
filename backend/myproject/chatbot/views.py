@@ -247,7 +247,7 @@ def process_user_message(user_message):
                 return f"Based on your selected location, insurance company, and service '{service}', the estimated cost is ${estimate}."
     
     elif "find" in user_message.lower() and "doctor" in user_message.lower():
-        return '''To search for a doctor by name, condition, or treatment, please visit the UVA website and use the <a href="https://uvahealth.com/findadoctor" target="_blank" style="color: #add8e6; text-decoration: underline;">'Find a Doctor'</a> tool!'''
+        return '''To search for a doctor by name, condition, or treatment, use the <a href="https://uvahealth.com/findadoctor" target="_blank" style="color: #add8e6; text-decoration: underline;">'Find a Doctor'</a> tool!'''
     
     elif any(service_keyword in user_message.lower() for service_keyword in ["service", "services"]):
         services_with_links = {
