@@ -5,9 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import random
 
-# Josh's API key
-YOUR_API_KEY = "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"
-
+#If deploying, paste API key here:
+YOUR_API_KEY = "api key goes here"
 
 @csrf_exempt
 def chatbot_response(request):
